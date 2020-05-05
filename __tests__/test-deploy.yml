@@ -1,0 +1,13 @@
+---
+- name: Deploy to testing Docker container
+  hosts: test
+  vars:
+    project_environment: 'staging'
+    project_name: 'info-test'
+    project_port: '3000'
+    project_admin_email: 'admin@test.info'
+    image: 'test_app.tar'
+    server_names: 'localhost,www.localhost'
+    version: '0.1.0'
+  roles:
+    - role: practical-ansible.nginx-docker

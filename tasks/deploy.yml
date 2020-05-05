@@ -1,0 +1,35 @@
+---
+
+- name: Create project dirs
+  file:
+    path: "{{item}}"
+    state: directory
+    mode: 0775
+    group: '{{group}}'
+    owner: '{{user}}'
+  with_items: 
+    - '{{ dir_project }}'
+    - '{{ dir_versions }}'
+
+- name: Upload artifact
+  copy:
+    src: '{{ image }}'
+    dest: '{{ file_image }}'
+    force: no
+
+- name: Import image
+  docker_image:
+    force_source: no
+    force_tag: no
+    load_path: '{{ file_image }}'
+    name: '{{ project_name }}:{{ version }}'
+    source: load
+    tag: '{{ version }}'
+
+- name: Start container
+  docker_container:
+    name: '{{ project_name }}'
+    state: started
+    pull: false
+    image: '{{ project_name }}:{{ version }}'
+

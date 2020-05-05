@@ -1,0 +1,9 @@
+---
+group: 'www-data'
+max_fileupload_size: '1M'
+overwrite: 'no'
+project_environment: 'staging'
+projects_directory: '/var/www'
+ssl_sign_by: 'letsencrypt'
+systemd_dir: '/etc/systemd/system'
+user: 'www-data'

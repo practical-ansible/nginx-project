@@ -1,0 +1,11 @@
+---
+- name: Install system dependencies
+  become: true
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - nginx
+      - docker.io
+      - python3-docker

@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: Pavel Žák
+  description: Deploy your Docker project to Nginx with minimal config
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+   - name: Ubuntu
+     versions:
+     - all
+
+  galaxy_tags:
+    - nginx
+    - deploy
+    - letsencrypt
+    - certbot
+    - http
+    - https
+    - docker
+    - npm
+    - systemd

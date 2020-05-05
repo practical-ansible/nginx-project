@@ -1,0 +1,45 @@
+---
+- name: Install pip and cron
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+      packages:
+        - python3-pip
+        - cron
+
+- name: Instal certbot from pip
+  pip:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+      - certbot
+      - certbot-nginx
+
+- name: Set self signed facts
+  set_fact:
+    file_letsencrypt_cert: '/etc/letsencrypt/live/{{ dns_main }}/cert.pem'
+    file_letsencrypt_key: '/etc/letsencrypt/live/{{ dns_main }}/privkey.pem'
+
+- name: Generate self-signed certificate
+  shell: 'certbot -n --nginx --agree-tos --email {{project_admin_email}} --domains {{ dns_all | join(",") }}'
+
+- name: Link certificate
+  file:
+    src: '{{ file_letsencrypt_cert }}'
+    dest: '{{ file_ssl_cert }}'
+    state: link
+
+- name: Link key
+  file:
+    src: '{{ file_letsencrypt_key }}'
+    dest: '{{ file_ssl_key }}'
+    state: link
+
+- name: Configure Lets Encrypt renew cron job
+  cron:
+    name: Renew Lets Encrypt certificates
+    weekday: 0
+    job: certbot renew
+

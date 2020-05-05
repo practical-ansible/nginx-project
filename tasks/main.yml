@@ -1,0 +1,43 @@
+---
+- name: Make project id environment safe
+  set_fact:
+    instance_id: 'docker-{{ project_name }}-{{ project_environment }}'
+
+- name: Verify port is defined
+  fail:
+    msg: You must define port
+  when: not project_port
+
+- name: Verify server names are defined
+  fail:
+    msg: You must define at least one server name
+  when: not server_names
+
+- name: Verify project version is defined
+  fail:
+    msg: You must define project version
+  when: not version
+
+- name: Verify project environment is defined
+  fail:
+    msg: You must define project environment
+  when: not project_environment
+
+- name: Verify project admin email is defined
+  fail:
+    msg: You must define project_admin_email
+  when: not project_admin_email
+
+
+- name: Configure directories
+  set_fact:
+    dir_project: '{{ projects_directory }}/{{ project_name }}'
+
+- name: Configure paths
+  set_fact:
+    dir_versions: '{{ dir_project }}/versions'
+    file_image: '{{ dir_project }}/versions/{{ version }}.tar'
+
+- include_tasks: deps.yml
+- include_tasks: deploy.yml
+- include_tasks: config.yml

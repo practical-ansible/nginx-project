@@ -1,0 +1,8 @@
+---
+- name: Deploy node package
+  hosts: web
+  vars:
+    node_project_environment: 'staging'
+
+  roles:
+    - role: practical-ansible.nginx_node

@@ -1,0 +1,53 @@
+---
+- name: Parse server names
+  set_fact:
+    dns_all: '{{ server_names.split(",") }}'
+
+- name: Set main domain
+  set_fact:
+    dns_main: '{{ dns_all[0] }}'
+
+- name: Set config facts
+  set_fact:
+    dir_ssl: '{{ dir_project }}/ssl'
+    dns_other_names: '{{ dns_all | difference([dns_main]) }}'
+    file_ssl_cert: '{{ dir_project }}/ssl/cert'
+    file_ssl_key: '{{ dir_project }}/ssl/key'
+
+- name: Create config dirs
+  file:
+    path: "{{item}}"
+    state: directory
+    mode: 0775
+    group: '{{group}}'
+    owner: '{{user}}'
+  with_items: 
+    - '{{ dir_ssl }}'
+
+- name: Check SSL existence
+  register: ssl_cert_stat
+  stat:
+    path: '{{ item }}'
+  with_items:
+    - '{{ file_ssl_cert }}'
+    - '{{ file_ssl_key }}'
+
+- include_tasks: config-ssl-initial.yml
+  when: ssl_cert_stat is all 
+
+- name: Configure nginx SSL config file
+  become: true
+  template:
+    src: nginx-ssl.conf
+    dest: '/etc/nginx/sites-available/{{ instance_id }}.conf'
+  notify:
+    - restart nginx
+
+- name: Enable nginx app
+  become: true
+  file:
+    src: '/etc/nginx/sites-available/{{ instance_id }}.conf'
+    dest: '/etc/nginx/sites-enabled/{{ instance_id }}.conf'
+    state: link
+  notify:
+    - restart nginx

@@ -1,0 +1,42 @@
+---
+- name: Set self signed facts
+  set_fact:
+    dir_ssl_self_signed: '{{ dir_ssl }}/self-signed'
+    file_self_signed_config: '{{ dir_ssl }}/self-signed/openssl.conf'
+    file_self_signed_key: '{{ dir_ssl }}/self-signed/self-signed.key'
+    file_self_signed_cert: '{{ dir_ssl }}/self-signed/self-signed.crt'
+
+- name: Create self signed dir
+  file:
+    dest: '{{ dir_ssl_self_signed }}'
+    state: directory
+
+- name: Check self signed certificate existence
+  register: self_signed_cert_stat
+  stat:
+    path: '{{ item }}'
+  with_items:
+    - '{{ file_self_signed_cert }}'
+    - '{{ file_self_signed_key }}'
+
+- name: Create OpenSSL config file
+  template:
+    src: openssl-self-signed.conf
+    dest: '{{ file_self_signed_config }}'
+
+- name: Generate self-signed certificate
+  shell: 'openssl req -new -x509 -out {{ file_self_signed_cert }} -keyout {{ file_self_signed_key }} -newkey rsa:2048 -nodes -sha256 -config {{ file_self_signed_config }}'
+  when: self_signed_cert_stat is all
+
+- name: Link certificate
+  file:
+    src: '{{ file_self_signed_cert }}'
+    dest: '{{ file_ssl_cert }}'
+    state: link
+
+- name: Link key
+  file:
+    src: '{{ file_self_signed_key }}'
+    dest: '{{ file_ssl_key }}'
+    state: link
+

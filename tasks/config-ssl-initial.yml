@@ -1,0 +1,26 @@
+---
+- name: Configure nginx non-SSL config file
+  template:
+    src: nginx.conf
+    dest: '/etc/nginx/sites-available/{{ instance_id }}.conf'
+  notify:
+    - restart nginx
+
+- name: Enable nginx app
+  file:
+    src: '/etc/nginx/sites-available/{{ instance_id }}.conf'
+    dest: '/etc/nginx/sites-enabled/{{ instance_id }}.conf'
+    state: link
+  notify:
+    - restart nginx
+
+- name: Create SSL cert storage
+  file:
+    dest: '{{ dir_ssl }}'
+
+- include_tasks: config-ssl-self-signed.yml
+  when: ssl_sign_by == 'self'
+
+- include_tasks: config-ssl-letsencrypt.yml
+  when: ssl_sign_by == 'letsencrypt'
+
