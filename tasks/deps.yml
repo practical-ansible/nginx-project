@@ -1,6 +1,5 @@
 ---
 - name: Install system dependencies
-  become: true
   apt:
     name: "{{ packages }}"
     state: present
@@ -8,4 +7,6 @@
     packages:
       - nginx
       - docker.io
+      - docker
+      - python3-distutils
       - python3-docker

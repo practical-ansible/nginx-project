@@ -27,9 +27,11 @@
     tag: '{{ version }}'
 
 - name: Start container
+  register: container_status
   docker_container:
-    name: '{{ project_name }}'
-    state: started
-    pull: false
     image: '{{ project_name }}:{{ version }}'
+    name: '{{ project_name }}'
+    published_ports: all
+    pull: false
+    state: started
 

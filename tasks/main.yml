@@ -37,6 +37,7 @@
   set_fact:
     dir_versions: '{{ dir_project }}/versions'
     file_image: '{{ dir_project }}/versions/{{ version }}.tar'
+    file_site_config: '/etc/nginx/sites-available/{{ instance_id }}.conf'
 
 - include_tasks: deps.yml
 - include_tasks: deploy.yml
