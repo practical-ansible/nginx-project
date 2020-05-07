@@ -23,7 +23,7 @@
     file_letsencrypt_key: '/etc/letsencrypt/live/{{ dns_main }}/privkey.pem'
 
 - name: Generate self-signed certificate
-  shell: 'certbot -n --nginx --agree-tos --email {{project_admin_email}} --domains {{ dns_all | join(",") }}'
+  shell: 'certbot -n --nginx --agree-tos --email {{ project_admin_email }} --domains {{ dns_all | join(",") }}'
 
 - name: Link certificate
   file:

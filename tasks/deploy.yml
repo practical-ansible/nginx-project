@@ -2,12 +2,12 @@
 
 - name: Create project dirs
   file:
-    path: "{{item}}"
+    path: "{{ item }}"
     state: directory
     mode: 0775
-    group: '{{group}}'
-    owner: '{{user}}'
-  with_items: 
+    group: '{{ group }}'
+    owner: '{{ user }}'
+  with_items:
     - '{{ dir_project }}'
     - '{{ dir_versions }}'
 

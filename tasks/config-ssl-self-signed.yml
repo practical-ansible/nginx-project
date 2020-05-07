@@ -29,7 +29,16 @@
     follow: true
 
 - name: Generate self-signed certificate
-  shell: 'openssl req -new -x509 -out {{ file_self_signed_cert }} -keyout {{ file_self_signed_key }} -newkey rsa:2048 -nodes -sha256 -config {{ file_self_signed_config }}'
+  shell: >-
+    openssl req
+    -new
+    -x509
+    -out {{ file_self_signed_cert }}
+    -keyout {{ file_self_signed_key }}
+    -newkey rsa:2048
+    -nodes
+    -sha256
+    -config {{ file_self_signed_config }}
   when: not (self_signed_cert_stat.stat.exists and self_signed_key_stat.stat.exists)
 
 - name: Link certificate

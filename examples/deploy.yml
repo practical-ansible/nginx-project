@@ -5,4 +5,4 @@
     node_project_environment: 'staging'
 
   roles:
-    - role: practical-ansible.nginx_node
+    - role: practical-ansible.nginx_container
