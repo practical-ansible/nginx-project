@@ -22,4 +22,4 @@ jobs:
             tasks/*.yml
       - name: Run test deploy
         working-directory: ./__tests__
-        run: ./test-deploy.sh
+        run: ./run-tests.sh

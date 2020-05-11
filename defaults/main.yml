@@ -28,10 +28,14 @@ env:
   nginx_docker: true
 
 # @var image:description: >
-# Path to the extracted docker image
+# Path to the extracted docker image.
+#
+# When empty, the role will attempt to build the image on local host before
+# uploading the image to the remote. Expects the Dockerfile to be present in
+# the same directory as the playbook.
 # @end
 # @var image:example: >
-# image: '../my-app.tar
+# image: './dist/my-app.tar
 # @end
 image: ''
 
