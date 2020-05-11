@@ -8,5 +8,6 @@
       - nginx
       - docker.io
       - docker
+      - docker-compose
       - python3-distutils
       - python3-docker
