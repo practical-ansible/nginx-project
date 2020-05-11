@@ -3,12 +3,9 @@
   hosts: test
   vars:
     admin_email: 'admin@test.info'
-    image: 'test_app.tar'
-    port: '3000'
-    project_name: 'info-test'
+    project_port: 3000
     server_names: 'localhost,www.localhost'
     ssl_sign_by: 'self'
-    version: '0.1.0'
     env:
       print_this: 'Testing deployment: X Æ A-12'
   roles:

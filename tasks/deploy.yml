@@ -1,4 +1,29 @@
 ---
+- name: Configure local image path
+  set_fact:
+    file_image_local: '{{ playbook_dir }}/{{ project_name }}-{{ project_version }}.tar'
+  when: not image
+
+- name: Check local image archive
+  delegate_to: 127.0.0.1
+  stat:
+    path: '{{ file_image_local }}'
+    follow: true
+  register: image_local_stat
+  when: not image
+
+- name: Build the image
+  delegate_to: 127.0.0.1
+  docker_image:
+    archive_path: '{{ file_image_local }}'
+    source: build
+    name: '{{ project_name }}'
+    tag: '{{ project_version }}'
+    state: present
+    build:
+      path: '{{ playbook_dir }}'
+  when: not image and not image_local_stat.stat.exists
+
 - name: Create project dirs
   file:
     path: "{{ item }}"
@@ -12,7 +37,7 @@
 
 - name: Upload artifact
   copy:
-    src: '{{ image }}'
+    src: '{{ file_image_local }}'
     dest: '{{ file_image }}'
     force: false
 
@@ -21,15 +46,16 @@
     force_source: false
     force_tag: false
     load_path: '{{ file_image }}'
-    name: '{{ project_name }}:{{ version }}'
+    name: '{{ project_name }}:{{ project_version }}'
     source: load
-    tag: '{{ version }}'
+    state: present
+    tag: '{{ project_version }}'
 
 - name: Start container
   register: container_status
   docker_container:
     env: '{{ env }}'
-    image: '{{ project_name }}:{{ version }}'
+    image: '{{ project_name }}:{{ project_version }}'
     name: '{{ project_name }}'
     published_ports: all
     pull: false

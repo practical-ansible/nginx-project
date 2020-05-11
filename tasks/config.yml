@@ -28,7 +28,7 @@
   set_fact:
     container_networks: '{{ container_status.container.NetworkSettings.Networks }}'
     container_ports: '{{ container_status.container.NetworkSettings.Ports }}'
-    container_main_port_spec: '{{ port }}/tcp'
+    container_main_port_spec: '{{ project_port }}/tcp'
 
 - name: Resolve main port
   set_fact:

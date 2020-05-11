@@ -8,7 +8,32 @@ Use Ansible to deploy Docker projects to Nginx with or without https. This role 
 
 ## Prerequisities
 
-* target running Ubuntu
 * target user with rights to config nginx
 * target user with rights to run docker
 * exported docker image
+
+## Install
+
+```shell
+ansible-galaxy install practical-ansible.nginx_docker
+```
+
+## Example
+
+```yaml
+---
+- name: Deploy to testing Docker container
+  hosts: test
+  vars:
+    admin_email: 'admin@test.info'
+    image: 'test_app.tar'
+    project_port: '3000'
+    project_name: 'info-test'
+    project_version: '0.1.99'
+    server_names: 'localhost,www.localhost'
+    ssl_sign_by: 'self'
+    env:
+      print_this: 'Testing deployment: X Æ A-12'
+  roles:
+    - role: practical-ansible.nginx-docker
+```

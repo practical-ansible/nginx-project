@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
-docker stop hosting-test 2> /dev/null
-docker rm hosting-test 2> /dev/null
-docker build -t hosting-test .
-docker run -v /var/run/docker.sock:/var/run/docker.sock -d -P --rm --name hosting-test hosting-test
+if [[ "$1" != "debug" ]]; then
+  echo "Running local hosting container"
+  docker stop hosting-test 2> /dev/null
+  docker rm hosting-test 2> /dev/null
+  docker build -t hosting-test hosting
+  docker run -v /var/run/docker.sock:/var/run/docker.sock -d -P --rm --name hosting-test hosting-test
+fi
 
 PORT=$(docker port hosting-test 22 | cut -d ':' -f2)
 
@@ -13,16 +16,9 @@ echo -e "[test]\nroot@127.0.0.1 ansible_port=${PORT} ansible_password=test" > in
 mkdir roles 2> /dev/null
 ln -s ../.. roles/practical-ansible.nginx-docker 2> /dev/null 
 
-# Build and export the image from docker
-docker build -t info-test:0.1.0 test
-docker save info-test > test_app.tar
-
-# Image must be removed, so we can test that it was added
-docker image rm info-test:0.1.0
-
 export ANSIBLE_HOST_KEY_CHECKING=False
 ansible-playbook test-deploy.yml -i inventory -vvv
 
-if [[ "$1" != "inspect" ]]; then
+if [[ "$1" != "inspect" ]] && [[ "$1" != "debug" ]]; then
   docker stop hosting-test info-test
 fi

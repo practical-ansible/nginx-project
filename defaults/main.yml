@@ -27,11 +27,6 @@ client_max_body_size: '1M'
 env:
   nginx_docker: true
 
-# @var environment:description: >
-# Name of the project environment
-# @end
-environment: 'production'
-
 # @var image:description: >
 # Path to the extracted docker image
 # @end
@@ -40,21 +35,43 @@ environment: 'production'
 # @end
 image: ''
 
-# @var port:description: >
+# @var project_environment:description: >
+# Name of the project environment. The role expects that you host multiple 
+# instances of the application on one machine. The usual names are just
+# "production" and "staging", but it can be anything as long as you keep it
+# UNIX path friendly.
+# @end
+project_environment: 'production'
+
+# @var project_port:description: >
 # Inner port number of the container. The role will map this port from docker to nginx proxy|
 # @end
-# @var port:example: >
-# port: 3000
+# @var project_port:example: >
+# project_port: 3000
 # @end
-port: 80
+project_port: 80
 
 # @var project_name:description: >
-# Name of the project used to reference the project on host file system. It is read from package.json by default.
+# Name of the project used to reference the project on host file system. Make
+# sure that this name is equal to the name of the produced docker image. Role
+# will attempt to read this from package manager metadata.
 # @end
 # @var project_name:example: >
 # project_name: 'my-app'
 # @end
 project_name: ''
+
+# @var project_version:description: >
+# Project version, important for the version store on server. Role will attempt
+# to read this from package manager metadata. The version can be overriden, for 
+# example when deploying nightly version, you can just set it to "staging" or 
+# "nightly". The version can be anything as long as you keep it UNIX path 
+# friendly.
+# @end
+# @var project_version:example: >
+# project_version: '0.1.0'
+# @end
+project_version: 'staging'
 
 # @var projects_directory:description: >
 # Directory where you usually put projects on the target machine
@@ -86,11 +103,3 @@ use_ssl: true
 # User name that runs the project on target machine.
 # @end
 user: 'www-data'
-
-# @var version:description: >
-# Project version, important for the version store on server.
-# @end
-# @var version:example: >
-# version: '0.1.0'
-# @end
-version: 'staging'
