@@ -11,19 +11,32 @@
 - name: Instal certbot from pip
   pip:
     name: "{{ packages }}"
-    state: latest
+    state: present
   vars:
     packages:
-      - certbot
-      - certbot-nginx
+      - certbot==1.4
+      - certbot-nginx==1.4
 
 - name: Set self signed facts
   set_fact:
     file_letsencrypt_cert: '/etc/letsencrypt/live/{{ dns_main }}/cert.pem'
     file_letsencrypt_key: '/etc/letsencrypt/live/{{ dns_main }}/privkey.pem'
 
+- name: Check letsencrypt signed certificate existence
+  register: letsencrypt_cert_stat
+  stat:
+    path: '{{ file_letsencrypt_cert }}'
+    follow: true
+
+- name: Check self signed key existence
+  register: letsencrypt_key_stat
+  stat:
+    path: '{{ file_letsencrypt_key }}'
+    follow: true
+
 - name: Generate self-signed certificate
-  shell: 'certbot -n --nginx --agree-tos --email {{ project_admin_email }} --domains {{ dns_all | join(",") }}'
+  command: 'certbot -n --nginx --agree-tos --email {{ admin_email }} --domains {{ dns_all | join(",") }}'
+  when: not (letsencrypt_cert_stat.stat.exists and letsencrypt_key_stat.stat.exists)
 
 - name: Link certificate
   file:

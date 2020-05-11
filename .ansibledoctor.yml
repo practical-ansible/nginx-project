@@ -1,0 +1,9 @@
+---
+custom_header: HEADER.md
+logging:
+  level: debug
+template: readme
+exclude_files:
+  - __tests__/
+  - .git/
+  - .github/

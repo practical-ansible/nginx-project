@@ -2,12 +2,10 @@
 - name: Deploy to testing Docker container
   hosts: test
   vars:
-    project_environment: 'staging'
-    project_name: 'info-test'
-    project_port: '3000'
-    project_admin_email: 'admin@test.info'
+    admin_email: 'admin@test.info'
     image: 'test_app.tar'
-    interconnect: true
+    port: '3000'
+    project_name: 'info-test'
     server_names: 'localhost,www.localhost'
     ssl_sign_by: 'self'
     version: '0.1.0'

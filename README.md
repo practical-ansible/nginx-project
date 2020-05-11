@@ -1,42 +1,237 @@
-# Nginx node for ansible
+# Nginx-docker for ansible
 
-[![CircleCI](https://img.shields.io/circleci/project/github/practical-ansible/nginx-node.svg)](https://circleci.com/gh/practical-ansible/nginx-node)
-[![Quality](https://img.shields.io/ansible/quality/39746.svg)](https://galaxy.ansible.com/practical-ansible/nginx_node)
-[![Downloads](https://img.shields.io/ansible/role/d/39746.svg)](https://galaxy.ansible.com/practical-ansible/nginx_node)
+[![Quality](https://img.shields.io/ansible/quality/39746.svg)](https://galaxy.ansible.com/practical-ansible/nginx_docker)
+[![Downloads](https://img.shields.io/ansible/role/d/39746.svg)](https://galaxy.ansible.com/practical-ansible/nginx_docker)
 
-Deploy Node.js projects to Nginx with systemd. Orignial idea was to use uwsgi, but that is [not quite ready](https://uwsgi-docs.readthedocs.io/en/latest/V8.html) for this task. This role installs the nodejs application as systemd service.
+Use Ansible to deploy Docker projects to Nginx with or without https. This role does not really care what language you used to create your app.
 
 ## Prerequisities
 
-* project artifact
-* systemd on target machine
-* npm > 5 on target machine because we use `npm ci` command
+* target running Ubuntu
+* target user with rights to config nginx
+* target user with rights to run docker
+* exported docker image
 
-## Variables
+Use this to avoid Burnout Syndrome when deploying your Docker wrapped application to nginx.
 
-|Name|Required|Default|Description|
-|----|--------|-------|-----------|
-|`node_archive`|no|(what you get from `npm pack`)|Path to the packaged application, for example 'node-application-1.0.0.tgz'. Should work with any archive ansible can unpack.|
-|`node_env_config`|no||Environment variables configuration separated by space, for example: `API_URL=http://example.com OAUTH_TOKEN=j12kkjjkdl$$`|
-|`node_max_fileupload_size`|yes|1M|Maximum file upload size for Nginx|
-|`node_project_environment`|yes|staging|Project environment name|
-|`node_project_port`|yes||Port to run the node project on, for example: `3000`|
-|`node_server_name`|yes||Hostname to reference the application, for example: `mysite.example.com,mysite.example.cz`|
+## Table of content
 
-### Overrides
+* [Default Variables](#default-variables)
+  * [admin_email](#admin_email)
+  * [client_max_body_size](#client_max_body_size)
+  * [env](#env)
+  * [environment](#environment)
+  * [group](#group)
+  * [image](#image)
+  * [port](#port)
+  * [project_name](#project_name)
+  * [projects_directory](#projects_directory)
+  * [server_names](#server_names)
+  * [ssl_sign_by](#ssl_sign_by)
+  * [use_ssl](#use_ssl)
+  * [user](#user)
+  * [version](#version)
+* [Dependencies](#dependencies)
+* [License](#license)
+* [Author](#author)
 
-You can override these variables, but you should never need this.
+---
 
-|Name|Description|
-|----|-----------|
-|`node_group`|Unix group name that runs the project on target machine. Defaults to `www-data`|
-|`node_project_name`|Name of the project used to reference the project on host file system. It is read from package.json by default.|
-|`node_project_id`|Project id to reference it in system settings. Defaults to `node-{node_project_name}-{node_project_environment}`|
-|`node_projects_directory`|Directory where you usually put projects on the target machine. Defaults to `/var/www`|
-|`node_systemd_dir`|Where your systemd services live, defaults to `/etc/systemd/system`|
-|`node_user`|User name that runs the project on target machine. Defaults to `www-data`|
-|`node_version`|Project version, important for the version store on server. Read from package.json by default.|
+## Default Variables
 
-## TODO
+### admin_email
 
-* Auto select port based on config
+E-mail address of the project manager. Used by Let's encrypt as a account
+
+#### Default value
+
+```YAML
+admin_email: ''
+```
+
+### client_max_body_size
+
+Maximum file upload size for Nginx. Value as defined by [nginx documentation](http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size)
+
+#### Default value
+
+```YAML
+client_max_body_size: 1M
+```
+
+### env
+
+Dictionary of environment variables that will be passed to the docker container.
+
+#### Default value
+
+```YAML
+env:
+  nginx_docker: true
+```
+
+#### Example usage
+
+```YAML
+env:
+  PORT: 80
+  SECRET_TOKEN: xa2z3ik6
+```
+
+### environment
+
+Name of the project environment
+
+#### Default value
+
+```YAML
+environment: production
+```
+
+### group
+
+Unix group name that runs the project on target machine.
+
+#### Default value
+
+```YAML
+group: www-data
+```
+
+### image
+
+Path to the extracted docker image
+
+#### Default value
+
+```YAML
+image: ''
+```
+
+#### Example usage
+
+```YAML
+image: '../my-app.tar
+```
+
+### port
+
+Inner port number of the container. The role will map this port from docker to nginx proxy|
+
+#### Default value
+
+```YAML
+port: 80
+```
+
+#### Example usage
+
+```YAML
+port: 3000
+```
+
+### project_name
+
+Name of the project used to reference the project on host file system. It is read from package.json by default.
+
+#### Default value
+
+```YAML
+project_name: ''
+```
+
+#### Example usage
+
+```YAML
+project_name: 'my-app'
+```
+
+### projects_directory
+
+Directory where you usually put projects on the target machine
+
+#### Default value
+
+```YAML
+projects_directory: /var/www
+```
+
+### server_names
+
+List of hostnames used by the application. All of these will be proxied to the application.
+
+#### Default value
+
+```YAML
+server_names: ''
+```
+
+#### Example usage
+
+```YAML
+server_names: 'mysite.example.com,mysite.example.cz'
+```
+
+### ssl_sign_by
+
+Authority signing the SSL certificate for the application. Can be one of: 'letsencrypt', 'self'
+
+#### Default value
+
+```YAML
+ssl_sign_by: letsencrypt
+```
+
+### use_ssl
+
+Configure nginx to use SSL when proxying requests to the docker configuration.
+
+#### Default value
+
+```YAML
+use_ssl: true
+```
+
+#### Example usage
+
+```YAML
+use_ssl: false
+```
+
+### user
+
+User name that runs the project on target machine.
+
+#### Default value
+
+```YAML
+user: www-data
+```
+
+### version
+
+Project version, important for the version store on server.
+
+#### Default value
+
+```YAML
+version: staging
+```
+
+#### Example usage
+
+```YAML
+version: '0.1.0'
+```
+
+## Dependencies
+
+None.
+
+## License
+
+MIT
+
+## Author
+
+Pavel Žák

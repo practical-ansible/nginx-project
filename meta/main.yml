@@ -1,9 +1,13 @@
 ---
+# @meta description: > 
+# Use this to avoid Burnout Syndrome when deploying your Docker wrapped application 
+# to nginx.
+# @end
 galaxy_info:
   author: Pavel Žák
   description: Deploy your Docker project to Nginx with minimal config
   license: MIT
-  min_ansible_version: 2.4
+  min_ansible_version: 2.8
   platforms:
    - name: Ubuntu
      versions:
@@ -12,10 +16,9 @@ galaxy_info:
   galaxy_tags:
     - nginx
     - deploy
+    - hosting
     - letsencrypt
     - certbot
     - http
     - https
     - docker
-    - npm
-    - systemd

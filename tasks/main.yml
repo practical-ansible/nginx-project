@@ -1,33 +1,17 @@
 ---
 - name: Make project id environment safe
   set_fact:
-    instance_id: 'docker-{{ project_name }}-{{ project_environment }}'
+    instance_id: 'docker-{{ project_name }}-{{ environment }}'
 
-- name: Verify port is defined
-  fail:
-    msg: You must define port
-  when: not project_port
-
-- name: Verify server names are defined
-  fail:
-    msg: You must define at least one server name
-  when: not server_names
-
-- name: Verify project version is defined
-  fail:
-    msg: You must define project version
-  when: not version
-
-- name: Verify project environment is defined
-  fail:
-    msg: You must define project environment
-  when: not project_environment
-
-- name: Verify project admin email is defined
-  fail:
-    msg: You must define project_admin_email
-  when: not project_admin_email
-
+- name: Check required variables
+  assert:
+    that: "{{ item }} is defined"
+  with_items:
+    - admin_email
+    - environment
+    - port
+    - server_names
+    - version
 
 - name: Configure directories
   set_fact:
