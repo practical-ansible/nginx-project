@@ -29,6 +29,7 @@
 - name: Start container
   register: container_status
   docker_container:
+    env: '{{ env }}'
     image: '{{ project_name }}:{{ version }}'
     name: '{{ project_name }}'
     published_ports: all

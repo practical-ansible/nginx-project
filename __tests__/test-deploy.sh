@@ -23,4 +23,6 @@ docker image rm info-test:0.1.0
 export ANSIBLE_HOST_KEY_CHECKING=False
 ansible-playbook test-deploy.yml -i inventory -vvv
 
-docker stop hosting-test info-test
+if [[ "$1" != "inspect" ]]; then
+  docker stop hosting-test info-test
+fi

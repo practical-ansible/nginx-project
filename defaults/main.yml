@@ -8,3 +8,5 @@ ssl_sign_by: 'letsencrypt'
 systemd_dir: '/etc/systemd/system'
 user: 'www-data'
 use_ssl: true
+env:
+  nginx_docker: true

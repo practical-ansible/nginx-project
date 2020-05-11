@@ -11,5 +11,7 @@
     server_names: 'localhost,www.localhost'
     ssl_sign_by: 'self'
     version: '0.1.0'
+    env:
+      print_this: 'Testing deployment: X Æ A-12'
   roles:
     - role: practical-ansible.nginx-docker
