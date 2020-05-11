@@ -10,12 +10,13 @@ admin_email: ''
 group: 'www-data'
 
 # @var client_max_body_size:description: >
-# Maximum file upload size for Nginx. Value as defined by [nginx documentation](http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size)
+# Maximum file upload size for Nginx. Value as defined by
+# [nginx documentation](http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size)
 # @end
 client_max_body_size: '1M'
 
 # @var env:description: >
-# Dictionary of environment variables that will be passed to 
+# Dictionary of environment variables that will be passed to
 # the docker container.
 # @end
 # @var env:example: >
@@ -47,7 +48,7 @@ image: ''
 # @end
 port: 80
 
-# @var project_name:description: > 
+# @var project_name:description: >
 # Name of the project used to reference the project on host file system. It is read from package.json by default.
 # @end
 # @var project_name:example: >

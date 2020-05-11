@@ -4,9 +4,9 @@
     name: "{{ packages }}"
     state: present
   vars:
-      packages:
-        - python3-pip
-        - cron
+    packages:
+      - python3-pip
+      - cron
 
 - name: Instal certbot from pip
   pip:
@@ -35,7 +35,13 @@
     follow: true
 
 - name: Generate self-signed certificate
-  command: 'certbot -n --nginx --agree-tos --email {{ admin_email }} --domains {{ dns_all | join(",") }}'
+  command: >-
+    certbot
+    -n
+    --nginx
+    --agree-tos
+    --domains {{ dns_all | join(",") }}
+    --email {{ admin_email }}
   when: not (letsencrypt_cert_stat.stat.exists and letsencrypt_key_stat.stat.exists)
 
 - name: Link certificate
@@ -55,4 +61,3 @@
     name: Renew Lets Encrypt certificates
     weekday: 0
     job: certbot renew
-
