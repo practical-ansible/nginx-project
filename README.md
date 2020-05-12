@@ -1,5 +1,6 @@
 # Nginx-docker for ansible
 
+[![Integration](https://github.com/practical-ansible/nginx-docker/workflows/CI/badge.svg)](https://github.com/practical-ansible/nginx-docker/actions)
 [![Quality](https://img.shields.io/ansible/quality/48591.svg)](https://galaxy.ansible.com/practical-ansible/nginx_docker)
 [![Downloads](https://img.shields.io/ansible/role/d/48591.svg)](https://galaxy.ansible.com/practical-ansible/nginx_docker)
 [![Role](https://img.shields.io/ansible/role/48591)](https://galaxy.ansible.com/practical-ansible/nginx_docker)
@@ -8,10 +9,35 @@ Use Ansible to deploy Docker projects to Nginx with or without https. This role 
 
 ## Prerequisities
 
-* target running Ubuntu
 * target user with rights to config nginx
 * target user with rights to run docker
 * exported docker image
+
+## Install
+
+```shell
+ansible-galaxy install practical-ansible.nginx_docker
+```
+
+## Example
+
+```yaml
+---
+- name: Deploy to testing Docker container
+  hosts: test
+  vars:
+    admin_email: 'admin@test.info'
+    image: 'test_app.tar'
+    project_port: '3000'
+    project_name: 'info-test'
+    project_version: '0.1.99'
+    server_names: 'localhost,www.localhost'
+    ssl_sign_by: 'self'
+    env:
+      print_this: 'Testing deployment: X Æ A-12'
+  roles:
+    - role: practical-ansible.nginx-docker
+```
 
 Use this to avoid Burnout Syndrome when deploying your Docker wrapped application to nginx.
 
@@ -21,17 +47,17 @@ Use this to avoid Burnout Syndrome when deploying your Docker wrapped applicatio
   * [admin_email](#admin_email)
   * [client_max_body_size](#client_max_body_size)
   * [env](#env)
-  * [environment](#environment)
   * [group](#group)
   * [image](#image)
-  * [port](#port)
+  * [project_environment](#project_environment)
   * [project_name](#project_name)
+  * [project_port](#project_port)
+  * [project_version](#project_version)
   * [projects_directory](#projects_directory)
   * [server_names](#server_names)
   * [ssl_sign_by](#ssl_sign_by)
   * [use_ssl](#use_ssl)
   * [user](#user)
-  * [version](#version)
 * [Dependencies](#dependencies)
 * [License](#license)
 * [Author](#author)
@@ -79,16 +105,6 @@ env:
   SECRET_TOKEN: xa2z3ik6
 ```
 
-### environment
-
-Name of the project environment
-
-#### Default value
-
-```YAML
-environment: production
-```
-
 ### group
 
 Unix group name that runs the project on target machine.
@@ -101,7 +117,7 @@ group: www-data
 
 ### image
 
-Path to the extracted docker image
+Path to the extracted docker image. When empty, the role will attempt to build the image on local host before uploading the image to the remote. Expects the Dockerfile to be present in the same directory as the playbook.
 
 #### Default value
 
@@ -112,28 +128,22 @@ image: ''
 #### Example usage
 
 ```YAML
-image: '../my-app.tar
+image: './dist/my-app.tar
 ```
 
-### port
+### project_environment
 
-Inner port number of the container. The role will map this port from docker to nginx proxy|
+Name of the project environment. The role expects that you host multiple instances of the application on one machine. The usual names are just "production" and "staging", but it can be anything as long as you keep it UNIX path friendly.
 
 #### Default value
 
 ```YAML
-port: 80
-```
-
-#### Example usage
-
-```YAML
-port: 3000
+project_environment: production
 ```
 
 ### project_name
 
-Name of the project used to reference the project on host file system. It is read from package.json by default.
+Name of the project used to reference the project on host file system. Make sure that this name is equal to the name of the produced docker image. Role will attempt to read this from package manager metadata.
 
 #### Default value
 
@@ -145,6 +155,38 @@ project_name: ''
 
 ```YAML
 project_name: 'my-app'
+```
+
+### project_port
+
+Inner port number of the container. The role will map this port from docker to nginx proxy|
+
+#### Default value
+
+```YAML
+project_port: 80
+```
+
+#### Example usage
+
+```YAML
+project_port: 3000
+```
+
+### project_version
+
+Project version, important for the version store on server. Role will attempt to read this from package manager metadata. The version can be overriden, for example when deploying nightly version, you can just set it to "staging" or "nightly". The version can be anything as long as you keep it UNIX path friendly.
+
+#### Default value
+
+```YAML
+project_version: staging
+```
+
+#### Example usage
+
+```YAML
+project_version: '0.1.0'
 ```
 
 ### projects_directory
@@ -207,22 +249,6 @@ User name that runs the project on target machine.
 
 ```YAML
 user: www-data
-```
-
-### version
-
-Project version, important for the version store on server.
-
-#### Default value
-
-```YAML
-version: staging
-```
-
-#### Example usage
-
-```YAML
-version: '0.1.0'
 ```
 
 ## Dependencies
