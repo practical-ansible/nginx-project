@@ -58,6 +58,7 @@ else
   echo '========'
 
   for failed_test in $failed_list; do
+    echo Output of ${failed_test}
     cat ${failed_test}/log
   done
 
