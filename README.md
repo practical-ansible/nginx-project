@@ -19,25 +19,29 @@ Use Ansible to deploy Docker projects to Nginx with or without https. This role 
 ansible-galaxy install practical-ansible.nginx_docker
 ```
 
-## Example
+## Example playbook
+
+This would be the most usual playbook
 
 ```yaml
 ---
 - name: Deploy to testing Docker container
-  hosts: test
-  vars:
-    admin_email: 'admin@test.info'
-    image: 'test_app.tar'
-    project_port: '3000'
-    project_name: 'info-test'
-    project_version: '0.1.99'
-    server_names: 'localhost,www.localhost'
-    ssl_sign_by: 'self'
-    env:
-      print_this: 'Testing deployment: X Æ A-12'
+  hosts: all
   roles:
-    - role: practical-ansible.nginx-docker
+    - role: practical-ansible.nginx_docker
+      vars:
+        admin_email: 'admin@test.info'
+        image: 'test_app.tar'
+        project_port: '3000'
+        project_name: 'my-app'
+        project_version: '0.1.0'
+        server_names: 'localhost,www.localhost'
+        use_ssl: true
+        env:
+          print_this: 'Testing deployment: X Æ A-12'
 ```
+
+You can find more examples in the [__tests__](https://github.com/practical-ansible/nginx-docker/tree/master/__tests__) directory.
 
 Use this to avoid Burnout Syndrome when deploying your Docker wrapped application to nginx.
 

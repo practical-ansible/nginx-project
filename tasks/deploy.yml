@@ -6,6 +6,7 @@
 
 - name: Check local image archive
   delegate_to: 127.0.0.1
+  become: false
   stat:
     path: '{{ file_image_local }}'
     follow: true
@@ -14,6 +15,7 @@
 
 - name: Build the image
   delegate_to: 127.0.0.1
+  become: false
   docker_image:
     archive_path: '{{ file_image_local }}'
     source: build

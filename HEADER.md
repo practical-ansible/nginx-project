@@ -5,13 +5,13 @@
 [![Downloads](https://img.shields.io/ansible/role/d/48591.svg)](https://galaxy.ansible.com/practical-ansible/nginx_docker)
 [![Role](https://img.shields.io/ansible/role/48591)](https://galaxy.ansible.com/practical-ansible/nginx_docker)
 
-Use Ansible to deploy Docker projects to Nginx with or without https. This role does not really care what language you used to create your app.
+Use Ansible to deploy Docker projects to Nginx with or without https. This role does not really care what language you used to create your app. Created to be used with continuous integration and continuous deployment tools.
 
 ## Prerequisities
 
-* target user with rights to config nginx
-* target user with rights to run docker
-* exported docker image
+* Target user with rights to config nginx
+* Target user with rights to run docker
+* Exported docker image
 
 ## Install
 
@@ -19,22 +19,30 @@ Use Ansible to deploy Docker projects to Nginx with or without https. This role 
 ansible-galaxy install practical-ansible.nginx_docker
 ```
 
-## Example
+## Example playbook
+
+This would be the most usual playbook
 
 ```yaml
 ---
 - name: Deploy to testing Docker container
-  hosts: test
-  vars:
-    admin_email: 'admin@test.info'
-    image: 'test_app.tar'
-    project_port: '3000'
-    project_name: 'info-test'
-    project_version: '0.1.99'
-    server_names: 'localhost,www.localhost'
-    ssl_sign_by: 'self'
-    env:
-      print_this: 'Testing deployment: X Æ A-12'
+  hosts: all
   roles:
-    - role: practical-ansible.nginx-docker
+    - role: practical-ansible.nginx_docker
+      vars:
+        admin_email: 'admin@test.info'
+        image: 'test_app.tar'
+        project_port: '3000'
+        project_name: 'my-app'
+        project_version: '0.1.0'
+        server_names: 'localhost,www.localhost'
+        use_ssl: true
+        env:
+          print_this: 'Testing deployment: X Æ A-12'
 ```
+
+You can find more examples in the [__tests__](https://github.com/practical-ansible/nginx-docker/tree/master/__tests__) directory.
+
+## Example CI
+
+

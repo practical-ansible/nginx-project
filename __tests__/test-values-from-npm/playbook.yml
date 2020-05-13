@@ -9,4 +9,4 @@
     env:
       print_this: 'Testing deployment: X Æ A-12'
   roles:
-    - role: practical-ansible.nginx-docker
+    - role: practical-ansible.nginx_docker
