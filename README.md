@@ -5,13 +5,13 @@
 [![Downloads](https://img.shields.io/ansible/role/d/48591.svg)](https://galaxy.ansible.com/practical-ansible/nginx_docker)
 [![Role](https://img.shields.io/ansible/role/48591)](https://galaxy.ansible.com/practical-ansible/nginx_docker)
 
-Use Ansible to deploy Docker projects to Nginx with or without https. This role does not really care what language you used to create your app.
+Use Ansible to deploy Docker projects to Nginx with or without https. This role does not really care what language you used to create your app. Created to be used with continuous integration and continuous deployment tools.
 
 ## Prerequisities
 
-* target user with rights to config nginx
-* target user with rights to run docker
-* exported docker image
+* Target user with rights to config nginx
+* Target user with rights to run docker
+* Exported docker image
 
 ## Install
 
@@ -42,6 +42,12 @@ This would be the most usual playbook
 ```
 
 You can find more examples in the [__tests__](https://github.com/practical-ansible/nginx-docker/tree/master/__tests__) directory.
+
+## Example CI
+
+There are some more [examples of configuration](./examples).
+
+# Reference manual
 
 Use this to avoid Burnout Syndrome when deploying your Docker wrapped application to nginx.
 

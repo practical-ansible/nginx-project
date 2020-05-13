@@ -45,4 +45,6 @@ You can find more examples in the [__tests__](https://github.com/practical-ansib
 
 ## Example CI
 
+There are some more [examples of configuration](./examples).
 
+# Reference manual

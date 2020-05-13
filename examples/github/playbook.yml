@@ -1,0 +1,11 @@
+---
+- name: Build docker image and deploy to example hosting
+  hosts: test
+  vars:
+    project_port: 3000
+    server_names: 'example.com,www.example.com'
+    use_ssl: true
+    env:
+      ANALYTICS_CODE: '{{ lookup("env", "ANALYTICS_CODE") }}'
+  roles:
+    - role: practical-ansible.nginx_docker
