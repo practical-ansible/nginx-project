@@ -2,14 +2,11 @@
 
 - include_tasks: package.yml
 
-- name: ddd
-  debug:
-    var: project_name
 - name: Check required variables
   assert:
     that:
       - '{{ item }} is defined'
-      - '{{ item }} != ""'
+      - item
       - '{{ item }} != 0'
   with_items:
     - 'admin_email'
