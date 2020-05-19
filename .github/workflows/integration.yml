@@ -25,4 +25,4 @@ jobs:
             meta/*.yml
             tasks/*.yml
       - name: Run test deploy
-        run: ./uatr/uatr.sh
+        run: ./uatr/uatr.sh --verbose
