@@ -1,7 +1,7 @@
 ---
 - name: Configure nginx non-SSL config file
   template:
-    src: nginx.conf
+    src: '{{ project_config_non_ssl }}'
     dest: '{{ file_site_config }}'
   notify:
-    - restart nginx
+    - reload nginx

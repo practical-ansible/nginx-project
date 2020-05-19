@@ -1,52 +1,4 @@
 ---
-- name: Parse server names
-  set_fact:
-    dns_all: '{{ server_names.split(",") }}'
-
-- name: Set main domain
-  set_fact:
-    dns_main: '{{ dns_all[0] }}'
-
-- name: Set config facts
-  set_fact:
-    dir_ssl: '{{ dir_project }}/ssl'
-    dns_other_names: '{{ dns_all | difference([dns_main]) }}'
-    file_ssl_cert: '{{ dir_project }}/ssl/cert'
-    file_ssl_key: '{{ dir_project }}/ssl/key'
-
-- name: Create config dirs
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: 0775
-    group: '{{ group }}'
-    owner: '{{ user }}'
-  with_items:
-    - '{{ dir_ssl }}'
-
-- name: Set port facts
-  set_fact:
-    container_networks: '{{ container_status.container.NetworkSettings.Networks }}'
-    container_ports: '{{ container_status.container.NetworkSettings.Ports }}'
-    container_main_port_spec: '{{ project_port }}/tcp'
-
-- name: Resolve main port
-  set_fact:
-    container_main_addr: '{{ container_networks.bridge.IPAddress }}'
-    container_main_port: '{{ container_ports[container_main_port_spec][0] }}'
-
-- name: Check SSL cert existence
-  register: ssl_cert_stat
-  stat:
-    path: '{{ file_ssl_cert }}'
-    follow: true
-
-- name: Check SSL key existence
-  register: ssl_key_stat
-  stat:
-    path: '{{ file_ssl_key }}'
-    follow: true
-
 - include_tasks: config-non-ssl.yml
   when: not use_ssl
 
@@ -59,4 +11,4 @@
     dest: '/etc/nginx/sites-enabled/{{ instance_id }}.conf'
     state: link
   notify:
-    - restart nginx
+    - reload nginx

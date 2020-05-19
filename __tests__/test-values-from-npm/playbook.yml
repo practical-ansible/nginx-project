@@ -2,6 +2,7 @@
 - name: Deploy to testing Docker container
   hosts: test
   vars:
+    admin_email: 'admin@example.com'
     project_port: 3000
     server_names: 'localhost,www.localhost'
     ssl_sign_by: 'self'

@@ -9,36 +9,6 @@ admin_email: ''
 # @end
 group: 'www-data'
 
-# @var client_max_body_size:description: >
-# Maximum file upload size for Nginx. Value as defined by
-# [nginx documentation](http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size)
-# @end
-client_max_body_size: '1M'
-
-# @var env:description: >
-# Dictionary of environment variables that will be passed to
-# the docker container.
-# @end
-# @var env:example: >
-# env:
-#   PORT: 80
-#   SECRET_TOKEN: xa2z3ik6
-# @end
-env:
-  nginx_docker: true
-
-# @var image:description: >
-# Path to the extracted docker image.
-#
-# When empty, the role will attempt to build the image on local host before
-# uploading the image to the remote. Expects the Dockerfile to be present in
-# the same directory as the playbook.
-# @end
-# @var image:example: >
-# image: './dist/my-app.tar
-# @end
-image: ''
-
 # @var project_environment:description: >
 # Name of the project environment. The role expects that you host multiple 
 # instances of the application on one machine. The usual names are just
@@ -65,22 +35,10 @@ project_port: 80
 # @end
 project_name: ''
 
-# @var project_version:description: >
-# Project version, important for the version store on server. Role will attempt
-# to read this from package manager metadata. The version can be overriden, for 
-# example when deploying nightly version, you can just set it to "staging" or 
-# "nightly". The version can be anything as long as you keep it UNIX path 
-# friendly.
-# @end
-# @var project_version:example: >
-# project_version: '0.1.0'
-# @end
-project_version: 'staging'
-
 # @var projects_directory:description: >
 # Directory where you usually put projects on the target machine
 # @end
-projects_directory: '/var/www'
+projects_directory: '/var/practical-ansible'
 
 # @var server_names:description: >
 # List of hostnames used by the application. All of these will be proxied to the application.
