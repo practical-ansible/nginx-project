@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>It works!</title>
+  </head>
+  <body>
+    This app has been configured to use with nginx!
+    <ul>
+      {% for domain in dns_all %}
+      <li>
+        <a href="http{% if use_ssl %}s{% endif %}://{{domain}}">{{domain}}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

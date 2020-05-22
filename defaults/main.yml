@@ -17,18 +17,9 @@ group: 'www-data'
 # @end
 project_environment: 'production'
 
-# @var project_port:description: >
-# Inner port number of the container. The role will map this port from docker to nginx proxy|
-# @end
-# @var project_port:example: >
-# project_port: 3000
-# @end
-project_port: 80
-
 # @var project_name:description: >
-# Name of the project used to reference the project on host file system. Make
-# sure that this name is equal to the name of the produced docker image. Role
-# will attempt to read this from package manager metadata.
+# Name of the project used to reference the project on host file system. Role
+# will attempt to read this from package manager metadata, like npm.
 # @end
 # @var project_name:example: >
 # project_name: 'my-app'

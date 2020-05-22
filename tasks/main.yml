@@ -12,19 +12,20 @@
     - 'admin_email'
     - 'project_environment'
     - 'project_name'
-    - 'project_port'
     - 'server_names'
 
 - name: Make project id safe
   set_fact:
-    instance_id: 'docker-{{ project_name }}-{{ project_environment }}'
+    instance_id: '{{ project_name }}-{{ project_environment }}'
 
 - name: Configure paths
   set_fact:
+    dir_fallback: '{{ projects_directory }}/{{ project_name }}/fallback'
     dir_project: '{{ projects_directory }}/{{ project_name }}'
     dir_ssl: '{{ projects_directory }}/{{ project_name }}/ssl'
     dir_versions: '{{ projects_directory }}/{{ project_name }}/versions'
     file_site_config: '/etc/nginx/sites-available/{{ instance_id }}.conf'
+    file_site_fallback: '{{ projects_directory }}/{{ project_name }}/fallback/index.html'
     file_ssl_cert: '{{ projects_directory }}/{{ project_name }}/ssl/cert'
     file_ssl_key: '{{ projects_directory }}/{{ project_name }}/ssl/key'
 
@@ -51,8 +52,14 @@
     owner: '{{ user }}'
   with_items:
     - '{{ dir_project }}'
+    - '{{ dir_fallback }}'
     - '{{ dir_ssl }}'
     - '{{ dir_versions }}'
+
+- name: Create fallback template
+  template:
+    src: index.html
+    dest: '{{ file_site_fallback }}'
 
 - name: Check SSL cert existence
   register: ssl_cert_stat
@@ -65,9 +72,6 @@
   stat:
     path: '{{ file_ssl_key }}'
     follow: true
-
-- include_tasks: config-non-ssl.yml
-  when: not use_ssl
 
 - include_tasks: config-ssl.yml
   when: use_ssl and not (ssl_cert_stat.stat.exists and ssl_key_stat.stat.exists)

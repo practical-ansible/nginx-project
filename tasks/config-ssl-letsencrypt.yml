@@ -34,7 +34,15 @@
     path: '{{ file_letsencrypt_key }}'
     follow: true
 
-- name: Generate self-signed certificate
+- name: Configure nginx non-SSL config file
+  template:
+    src: nginx.conf
+    dest: '{{ file_site_config }}'
+  notify:
+    - reload nginx
+  when: not (letsencrypt_cert_stat.stat.exists and letsencrypt_key_stat.stat.exists)
+
+- name: Generate letsencrypt signed certificate
   command: >-
     certbot
     -n
