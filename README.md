@@ -5,18 +5,16 @@
 [![Downloads](https://img.shields.io/ansible/role/d/48591.svg)](https://galaxy.ansible.com/practical-ansible/nginx_docker)
 [![Role](https://img.shields.io/ansible/role/48591)](https://galaxy.ansible.com/practical-ansible/nginx_docker)
 
-This is a base for all practical-ansible nginx roles. Using this standalone does not really make sense.
+This is a base for all practical-ansible nginx roles. It does only initial configuration, like create working directory for the project and obtain SSL certificate
 
 ## Prerequisities
 
 * Target user with rights to config nginx
-* Target user with rights to run docker
-* Exported docker image
 
 ## Install
 
 ```shell
-ansible-galaxy install practical-ansible.nginx_docker
+ansible-galaxy install practical-ansible.nginx_project
 ```
 
 # Reference manual

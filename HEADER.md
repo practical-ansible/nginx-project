@@ -10,13 +10,11 @@ This is a base for all practical-ansible nginx roles. It does only initial confi
 ## Prerequisities
 
 * Target user with rights to config nginx
-* Target user with rights to run docker
-* Exported docker image
 
 ## Install
 
 ```shell
-ansible-galaxy install practical-ansible.nginx_docker
+ansible-galaxy install practical-ansible.nginx_project
 ```
 
 # Reference manual
