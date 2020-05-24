@@ -5,7 +5,10 @@
 [![Downloads](https://img.shields.io/ansible/role/d/48836.svg)](https://galaxy.ansible.com/practical-ansible/nginx_docker)
 [![Role](https://img.shields.io/ansible/role/48836)](https://galaxy.ansible.com/practical-ansible/nginx_docker)
 
-This is a base for all practical-ansible nginx roles. It does only initial configuration, like create working directory for the project and obtain SSL certificate
+This is a base for all practical-ansible nginx roles. It does only initial configuration, like create working directory for the project and obtain SSL certificate. Try other roles that depend on this one:
+
+* [nginx_static](https://github.com/practical-ansible/nginx-static)
+* [nginx_docker](https://github.com/practical-ansible/nginx-docker)
 
 ## Features
 
