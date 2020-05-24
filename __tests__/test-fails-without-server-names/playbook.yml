@@ -2,10 +2,11 @@
 - name: Deploy to testing Docker container
   hosts: test
   vars:
-    server_names: 'localhost,www.localhost'
-    project_name: 'test-basic'
+    admin_email: 'test@example.com'
+    ssl_sign_by: 'self'
+    project_name: 'test-fails-without-server-names'
     project_version: 0.1.0
-    use_ssl: false
+    use_ssl: true
     env:
       print_this: 'Testing deployment: X Æ A-12'
 
