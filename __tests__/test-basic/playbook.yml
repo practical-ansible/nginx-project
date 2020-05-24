@@ -11,3 +11,32 @@
 
   roles:
     - role: practical-ansible.nginx_project
+
+  tasks:
+    - name: Stat project dir
+      stat:
+        path: /var/practical-ansible/test-basic
+      register: stat_dir_project
+
+    - name: Stat fallback site dir
+      stat:
+        path: /var/practical-ansible/test-basic/fallback
+      register: stat_dir_fallback
+
+    - name: Stat ssl dir
+      stat:
+        path: /var/practical-ansible/test-basic/ssl
+      register: stat_dir_ssl
+
+    - name: Stat versions dir
+      stat:
+        path: /var/practical-ansible/test-basic/versions
+      register: stat_dir_versions
+
+    - name: Assert file existence
+      assert:
+        that:
+          - stat_dir_project.stat.exists
+          - stat_dir_fallback.stat.exists
+          - stat_dir_ssl.stat.exists
+          - stat_dir_versions.stat.exists
