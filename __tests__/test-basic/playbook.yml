@@ -20,7 +20,7 @@
 
     - name: Stat fallback site dir
       stat:
-        path: /var/practical-ansible/test-basic/fallback
+        path: /var/practical-ansible/test-basic/production/fallback
       register: stat_dir_fallback
 
     - name: Stat ssl dir

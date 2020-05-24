@@ -18,12 +18,14 @@
 
 - name: Configure paths
   set_fact:
-    dir_fallback: '{{ projects_directory }}/{{ project_name }}/fallback'
+    dir_fallback: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}/fallback'
     dir_project: '{{ projects_directory }}/{{ project_name }}'
     dir_ssl: '{{ projects_directory }}/{{ project_name }}/ssl'
     dir_versions: '{{ projects_directory }}/{{ project_name }}/versions'
+    dir_env: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}'
+    file_server_config: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}/server.conf'
     file_site_config: '/etc/nginx/sites-available/{{ instance_id }}.conf'
-    file_site_fallback: '{{ projects_directory }}/{{ project_name }}/fallback/index.html'
+    file_site_fallback: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}/fallback/index.html'
     file_ssl_cert: '{{ projects_directory }}/{{ project_name }}/ssl/cert'
     file_ssl_key: '{{ projects_directory }}/{{ project_name }}/ssl/key'
 
@@ -53,6 +55,7 @@
     - '{{ dir_fallback }}'
     - '{{ dir_ssl }}'
     - '{{ dir_versions }}'
+    - '{{ dir_env }}'
 
 - name: Create fallback template
   template:
@@ -71,11 +74,25 @@
     path: '{{ file_ssl_key }}'
     follow: true
 
+- name: Check server file existence
+  register: server_config_stat
+  stat:
+    path: '{{ file_server_config }}'
+    follow: true
+
 - name: Check config file existence
   register: config_file_stat
   stat:
     path: '{{ file_site_config }}'
     follow: true
+
+- name: Configure server
+  template:
+    src: nginx-serve-content.conf
+    dest: '{{ file_server_config }}'
+  notify:
+    - reload nginx
+  when: not server_config_stat.stat.exists
 
 - name: Configure nginx non-SSL config file
   template:
@@ -83,7 +100,7 @@
     dest: '{{ file_site_config }}'
   notify:
     - reload nginx
-  when: not config_file_stat.stat.exists
+  when: not use_ssl or not config_file_stat.stat.exists
 
 - include_tasks: config-ssl.yml
   when: use_ssl and not (ssl_cert_stat.stat.exists and ssl_key_stat.stat.exists)

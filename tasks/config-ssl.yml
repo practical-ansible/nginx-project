@@ -31,4 +31,3 @@
     dest: '{{ file_site_config }}'
   notify:
     - reload nginx
-  when: not config_file_stat.stat.exists
