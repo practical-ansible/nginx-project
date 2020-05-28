@@ -26,6 +26,15 @@ project_environment: 'production'
 # @end
 project_name: ''
 
+# @var project_version:description: >
+# Version of the project we are deploying
+# @end
+# @var project_version:example:>
+# project_version: '1.1.0'
+# project_version: '2'
+# @end
+project_version: ''
+
 # @var projects_directory:description: >
 # Directory where you usually put projects on the target machine
 # @end
