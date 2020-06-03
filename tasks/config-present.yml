@@ -74,12 +74,3 @@
   notify:
     - reload nginx
   when: state == 'present'
-
-- name: Disable nginx app
-  file:
-    src: '/etc/nginx/sites-available/{{ instance_id }}.conf'
-    dest: '/etc/nginx/sites-enabled/{{ instance_id }}.conf'
-    state: link
-  notify:
-    - reload nginx
-  when: state != 'present'

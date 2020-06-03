@@ -1,0 +1,29 @@
+---
+- name: Deploy to testing Docker container
+  hosts: test
+  vars:
+    server_names: 'localhost,www.localhost'
+    project_name: 'test-absent'
+    project_version: 0.1.0
+    use_ssl: false
+    state: absent
+
+  roles:
+    - role: practical-ansible.nginx_project
+
+  tasks:
+    - name: Stat project dir
+      stat:
+        path: /var/practical-ansible/test-absent
+      register: stat_dir_project
+
+    - name: Stat nginx site link
+      stat:
+        path: /etc/nginx/sites-enabled/test-basic.conf
+      register: stat_site_link
+
+    - name: Assert file existence
+      assert:
+        that:
+          - not stat_dir_project.stat.exists
+          - not stat_site_link.stat.exists

@@ -40,3 +40,6 @@
 
 - include_tasks: config-present.yml
   when: state != 'absent'
+
+- include_tasks: config-absent.yml
+  when: state == 'absent'

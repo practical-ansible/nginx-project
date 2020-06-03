@@ -1,0 +1,13 @@
+---
+- name: Disable nginx app
+  file:
+    src: '/etc/nginx/sites-available/{{ instance_id }}.conf'
+    dest: '/etc/nginx/sites-enabled/{{ instance_id }}.conf'
+    state: absent
+  notify:
+    - reload nginx
+
+- name: Remove project folder
+  file:
+    path: '{{ dir_project }}'
+    state: absent
