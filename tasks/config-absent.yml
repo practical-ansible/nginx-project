@@ -1,11 +1,13 @@
 ---
-- name: Disable nginx app
+- name: Remove nginx app
   file:
-    src: '/etc/nginx/sites-available/{{ instance_id }}.conf'
-    dest: '/etc/nginx/sites-enabled/{{ instance_id }}.conf'
+    path: '{{ item }}'
     state: absent
   notify:
     - reload nginx
+  with_items:
+    - '/etc/nginx/sites-enabled/{{ instance_id }}.conf'
+    - '/etc/nginx/sites-available/{{ instance_id }}.conf'
 
 - name: Remove project folder
   file:
