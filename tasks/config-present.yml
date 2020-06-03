@@ -1,0 +1,85 @@
+---
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Create project dirs
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0775
+    group: '{{ group }}'
+    owner: '{{ user }}'
+  with_items:
+    - '{{ dir_project }}'
+    - '{{ dir_fallback }}'
+    - '{{ dir_ssl }}'
+    - '{{ dir_versions }}'
+    - '{{ dir_env }}'
+
+- name: Create fallback template
+  template:
+    src: index.html
+    dest: '{{ file_site_fallback }}'
+
+- name: Check SSL cert existence
+  register: ssl_cert_stat
+  stat:
+    path: '{{ file_ssl_cert }}'
+    follow: true
+
+- name: Check SSL key existence
+  register: ssl_key_stat
+  stat:
+    path: '{{ file_ssl_key }}'
+    follow: true
+
+- name: Check server file existence
+  register: server_config_stat
+  stat:
+    path: '{{ file_server_config }}'
+    follow: true
+
+- name: Check config file existence
+  register: config_file_stat
+  stat:
+    path: '{{ file_site_config }}'
+    follow: true
+
+- name: Configure server
+  template:
+    src: nginx-serve-content.conf
+    dest: '{{ file_server_config }}'
+  notify:
+    - reload nginx
+  when: not server_config_stat.stat.exists
+
+- name: Configure nginx non-SSL config file
+  template:
+    src: nginx.conf
+    dest: '{{ file_site_config }}'
+  notify:
+    - reload nginx
+  when: not use_ssl or not config_file_stat.stat.exists
+
+- include_tasks: config-ssl.yml
+  when: use_ssl and not (ssl_cert_stat.stat.exists and ssl_key_stat.stat.exists)
+
+- name: Enable nginx app
+  file:
+    src: '/etc/nginx/sites-available/{{ instance_id }}.conf'
+    dest: '/etc/nginx/sites-enabled/{{ instance_id }}.conf'
+    state: link
+  notify:
+    - reload nginx
+  when: state == 'present'
+
+- name: Disable nginx app
+  file:
+    src: '/etc/nginx/sites-available/{{ instance_id }}.conf'
+    dest: '/etc/nginx/sites-enabled/{{ instance_id }}.conf'
+    state: link
+  notify:
+    - reload nginx
+  when: state != 'present'

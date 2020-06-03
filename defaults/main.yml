@@ -53,6 +53,14 @@ server_names: ''
 # @end
 ssl_sign_by: 'letsencrypt'
 
+# @var present:description: >
+# Deploy or undeploy the project. Available values: 'present', 'disabled', 'absent'
+# @end
+# @var present:example: >
+# state: disabled
+# @end
+state: 'present'
+
 # @var use_ssl:description: >
 # Configure nginx to use SSL when proxying requests to the docker configuration.
 # @end
