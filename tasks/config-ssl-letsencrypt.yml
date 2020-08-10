@@ -67,5 +67,5 @@
 - name: Configure Lets Encrypt renew cron job
   cron:
     name: Renew Lets Encrypt certificates
-    weekday: 0
+    weekday: '0'
     job: certbot renew
