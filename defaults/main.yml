@@ -38,7 +38,7 @@ project_version: ''
 # @var projects_directory:description: >
 # Directory where you usually put projects on the target machine
 # @end
-projects_directory: '/var/practical-ansible'
+projects_directory: '/var/lib/practical-ansible'
 
 # @var server_names:description: >
 # List of hostnames used by the application. All of these will be proxied to the application.
