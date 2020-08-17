@@ -15,22 +15,22 @@
   tasks:
     - name: Stat project dir
       stat:
-        path: /var/practical-ansible/test-basic
+        path: /var/lib/practical-ansible/test-basic
       register: stat_dir_project
 
     - name: Stat fallback site dir
       stat:
-        path: /var/practical-ansible/test-basic/production/fallback
+        path: /var/lib/practical-ansible/test-basic/production/fallback
       register: stat_dir_fallback
 
     - name: Stat ssl dir
       stat:
-        path: /var/practical-ansible/test-basic/production/ssl
+        path: /var/lib/practical-ansible/test-basic/production/ssl
       register: stat_dir_ssl
 
     - name: Stat versions dir
       stat:
-        path: /var/practical-ansible/test-basic/versions
+        path: /var/lib/practical-ansible/test-basic/versions
       register: stat_dir_versions
 
     - name: Assert file existence
