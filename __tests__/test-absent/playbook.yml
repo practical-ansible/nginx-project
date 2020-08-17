@@ -14,7 +14,7 @@
   tasks:
     - name: Stat project dir
       stat:
-        path: /var/practical-ansible/test-absent
+        path: /var/lib/practical-ansible/test-absent
       register: stat_dir_project
 
     - name: Stat nginx site link
