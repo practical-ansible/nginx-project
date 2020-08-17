@@ -36,11 +36,14 @@ Base library for other Practical Ansible projects
 * [Default Variables](#default-variables)
   * [admin_email](#admin_email)
   * [group](#group)
+  * [present](#present)
   * [project_environment](#project_environment)
   * [project_name](#project_name)
+  * [project_version](#project_version)
   * [projects_directory](#projects_directory)
   * [server_names](#server_names)
   * [ssl_sign_by](#ssl_sign_by)
+  * [state](#state)
   * [use_ssl](#use_ssl)
   * [user](#user)
 * [Dependencies](#dependencies)
@@ -71,6 +74,16 @@ Unix group name that runs the project on target machine.
 group: www-data
 ```
 
+### present
+
+Deploy or undeploy the project. Available values: 'present', 'disabled', 'absent'
+
+#### Example usage
+
+```YAML
+state: disabled
+```
+
 ### project_environment
 
 Name of the project environment. The role expects that you host multiple instances of the application on one machine. The usual names are just "production" and "staging", but it can be anything as long as you keep it UNIX path friendly.
@@ -97,6 +110,23 @@ project_name: ''
 project_name: 'my-app'
 ```
 
+### project_version
+
+Version of the project we are deploying
+
+#### Default value
+
+```YAML
+project_version: ''
+```
+
+#### Example usage
+
+```YAML
+project_version: '1.1.0'
+project_version: '2'
+```
+
 ### projects_directory
 
 Directory where you usually put projects on the target machine
@@ -104,7 +134,7 @@ Directory where you usually put projects on the target machine
 #### Default value
 
 ```YAML
-projects_directory: /var/practical-ansible
+projects_directory: /var/lib/practical-ansible
 ```
 
 ### server_names
@@ -131,6 +161,14 @@ Authority signing the SSL certificate for the application. Can be one of: 'letse
 
 ```YAML
 ssl_sign_by: letsencrypt
+```
+
+### state
+
+#### Default value
+
+```YAML
+state: present
 ```
 
 ### use_ssl
