@@ -20,14 +20,14 @@
   set_fact:
     dir_fallback: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}/fallback'
     dir_project: '{{ projects_directory }}/{{ project_name }}'
-    dir_ssl: '{{ projects_directory }}/{{ project_name }}/ssl'
+    dir_ssl: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}/ssl'
     dir_versions: '{{ projects_directory }}/{{ project_name }}/versions'
     dir_env: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}'
     file_server_config: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}/server.conf'
     file_site_config: '/etc/nginx/sites-available/{{ instance_id }}.conf'
     file_site_fallback: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}/fallback/index.html'
-    file_ssl_cert: '{{ projects_directory }}/{{ project_name }}/ssl/cert'
-    file_ssl_key: '{{ projects_directory }}/{{ project_name }}/ssl/key'
+    file_ssl_cert: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}/ssl/cert'
+    file_ssl_key: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}/ssl/key'
 
 - name: Parse server names
   set_fact:

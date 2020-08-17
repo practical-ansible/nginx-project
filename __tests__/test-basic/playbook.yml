@@ -25,7 +25,7 @@
 
     - name: Stat ssl dir
       stat:
-        path: /var/practical-ansible/test-basic/ssl
+        path: /var/practical-ansible/test-basic/production/ssl
       register: stat_dir_ssl
 
     - name: Stat versions dir
