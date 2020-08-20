@@ -11,5 +11,5 @@
 
 - name: Use testing package version
   set_fact:
-    project_version: '{{ project_version }}-{{ ansible_date_time.iso8601 }}'
+    project_version: '{{ project_version }}-{{ ansible_date_time.iso8601 | replace(":", "-") }}'
   when: project_environment != 'production' and project_version
