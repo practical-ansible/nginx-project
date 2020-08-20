@@ -3,5 +3,8 @@
   template:
     src: '{{ project_config_non_ssl }}'
     dest: '{{ file_site_config }}'
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
   notify:
     - reload nginx

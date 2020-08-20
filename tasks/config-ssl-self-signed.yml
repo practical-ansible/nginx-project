@@ -10,11 +10,17 @@
   file:
     dest: '{{ dir_ssl_self_signed }}'
     state: directory
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
 
 - name: Create OpenSSL config file
   template:
     src: openssl-self-signed.conf
     dest: '{{ file_self_signed_config }}'
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
 
 - name: Check self signed certificate existence
   register: self_signed_cert_stat
@@ -46,9 +52,15 @@
     src: '{{ file_self_signed_cert }}'
     dest: '{{ file_ssl_cert }}'
     state: link
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
 
 - name: Link key
   file:
     src: '{{ file_self_signed_key }}'
     dest: '{{ file_ssl_key }}'
     state: link
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'

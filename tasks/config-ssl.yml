@@ -12,6 +12,9 @@
     src: '{{ file_site_config }}'
     dest: '/etc/nginx/sites-enabled/{{ instance_id }}.conf'
     state: link
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
   notify:
     - reload nginx
   when: state == 'present'
@@ -19,6 +22,10 @@
 - name: Create SSL cert storage
   file:
     dest: '{{ dir_ssl }}'
+    state: directory
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
 
 - include_tasks: config-ssl-self-signed.yml
   when: ssl_sign_by == 'self'
@@ -30,5 +37,8 @@
   template:
     src: nginx-ssl.conf
     dest: '{{ file_site_config }}'
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
   notify:
     - reload nginx

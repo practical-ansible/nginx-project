@@ -38,6 +38,9 @@
   template:
     src: nginx.conf
     dest: '{{ file_site_config }}'
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
   notify:
     - reload nginx
   when: not (letsencrypt_cert_stat.stat.exists and letsencrypt_key_stat.stat.exists)
@@ -57,12 +60,18 @@
     src: '{{ file_letsencrypt_cert }}'
     dest: '{{ file_ssl_cert }}'
     state: link
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
 
 - name: Link key
   file:
     src: '{{ file_letsencrypt_key }}'
     dest: '{{ file_ssl_key }}'
     state: link
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
 
 - name: Configure Lets Encrypt renew cron job
   cron:

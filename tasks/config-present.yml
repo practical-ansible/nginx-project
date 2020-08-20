@@ -22,6 +22,9 @@
   template:
     src: index.html
     dest: '{{ file_site_fallback }}'
+    group: '{{ group }}'
+    mode: 0664
+    owner: '{{ user }}'
 
 - name: Check SSL cert existence
   register: ssl_cert_stat
@@ -51,6 +54,9 @@
   template:
     src: nginx-serve-content.conf
     dest: '{{ file_server_config }}'
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
   notify:
     - reload nginx
   when: not server_config_stat.stat.exists
@@ -59,6 +65,9 @@
   template:
     src: nginx.conf
     dest: '{{ file_site_config }}'
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
   notify:
     - reload nginx
   when: not use_ssl or not config_file_stat.stat.exists
@@ -71,6 +80,9 @@
     src: '/etc/nginx/sites-available/{{ instance_id }}.conf'
     dest: '/etc/nginx/sites-enabled/{{ instance_id }}.conf'
     state: link
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
   notify:
     - reload nginx
   when: state == 'present'
