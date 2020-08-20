@@ -1,0 +1,43 @@
+---
+- name: Deploy to testing Docker container
+  hosts: test
+  vars:
+    server_names: 'localhost,www.localhost'
+    project_name: 'test-staging'
+    project_version: 0.1.0
+    project_environment: 'staging'
+    use_ssl: false
+    env:
+      print_this: 'Testing deployment: X Æ A-12'
+
+  roles:
+    - role: practical-ansible.nginx_project
+
+  tasks:
+    - name: Stat project dir
+      stat:
+        path: /var/lib/practical-ansible/test-staging
+      register: stat_dir_project
+
+    - name: Stat fallback site dir
+      stat:
+        path: /var/lib/practical-ansible/test-staging/staging/fallback
+      register: stat_dir_fallback
+
+    - name: Stat ssl dir
+      stat:
+        path: /var/lib/practical-ansible/test-staging/staging/ssl
+      register: stat_dir_ssl
+
+    - name: Stat versions dir
+      stat:
+        path: /var/lib/practical-ansible/test-staging/versions
+      register: stat_dir_versions
+
+    - name: Assert file existence
+      assert:
+        that:
+          - stat_dir_project.stat.exists
+          - stat_dir_fallback.stat.exists
+          - stat_dir_ssl.stat.exists
+          - stat_dir_versions.stat.exists

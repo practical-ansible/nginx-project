@@ -8,3 +8,8 @@
 - name: Consume package.json
   include_tasks: package-npm.yml
   when: npm.name is defined
+
+- name: Use testing package version
+  set_fact:
+    project_version: '{{ project_version }}-{{ ansible_date_time.iso8601 }}'
+  when: project_environment != 'production' and project_version
