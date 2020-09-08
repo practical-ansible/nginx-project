@@ -27,6 +27,7 @@
     file_site_config: '/etc/nginx/sites-available/{{ instance_id }}.conf'
     file_site_fallback: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}/fallback/index.html'
     file_ssl_cert: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}/ssl/cert'
+    file_ssl_fullchain: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}/ssl/fullchain'
     file_ssl_key: '{{ projects_directory }}/{{ project_name }}/{{ project_environment }}/ssl/key'
 
 - name: Parse server names

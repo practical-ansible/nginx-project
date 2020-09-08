@@ -20,19 +20,31 @@
 - name: Set self signed facts
   set_fact:
     file_letsencrypt_cert: '/etc/letsencrypt/live/{{ dns_main }}/cert.pem'
+    file_letsencrypt_fullchain: '/etc/letsencrypt/live/{{ dns_main }}/fullchain.pem'
     file_letsencrypt_key: '/etc/letsencrypt/live/{{ dns_main }}/privkey.pem'
 
-- name: Check letsencrypt signed certificate existence
+- name: Check letsencrypt certificate existence
   register: letsencrypt_cert_stat
   stat:
     path: '{{ file_letsencrypt_cert }}'
     follow: true
 
-- name: Check self signed key existence
+- name: Check letsencrypt fullchain existence
+  register: letsencrypt_fullchain_stat
+  stat:
+    path: '{{ file_letsencrypt_fullchain }}'
+    follow: true
+
+- name: Check letsencrypt private key existence
   register: letsencrypt_key_stat
   stat:
     path: '{{ file_letsencrypt_key }}'
     follow: true
+
+- name: Configure config path
+  set_fact:
+    config_le: '{{not (letsencrypt_cert_stat.stat.exists and letsencrypt_key_stat.stat.exists and letsencrypt_fullchain_stat.exists)}}'
+
 
 - name: Configure nginx non-SSL config file
   template:
@@ -43,7 +55,7 @@
     owner: '{{ user }}'
   notify:
     - reload nginx
-  when: not (letsencrypt_cert_stat.stat.exists and letsencrypt_key_stat.stat.exists)
+  when: config_le
 
 - name: Generate letsencrypt signed certificate
   command: >-
@@ -53,12 +65,21 @@
     --agree-tos
     --domains {{ dns_all | join(",") }}
     --email {{ admin_email }}
-  when: not (letsencrypt_cert_stat.stat.exists and letsencrypt_key_stat.stat.exists)
+  when: config_le
 
 - name: Link certificate
   file:
     src: '{{ file_letsencrypt_cert }}'
     dest: '{{ file_ssl_cert }}'
+    state: link
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
+
+- name: Link fullchain
+  file:
+    src: '{{ file_letsencrypt_fullchain }}'
+    dest: '{{ file_ssl_fullchain }}'
     state: link
     group: '{{ group }}'
     mode: 0660
