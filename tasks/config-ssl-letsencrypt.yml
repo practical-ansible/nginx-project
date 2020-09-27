@@ -43,7 +43,7 @@
 
 - name: Configure config path
   set_fact:
-    config_le: '{{ not (letsencrypt_cert_stat.stat.exists and letsencrypt_key_stat.stat.exists and letsencrypt_fullchain_stat.exists) }}'
+    config_le: '{{ not (letsencrypt_cert_stat.stat.exists and letsencrypt_key_stat.stat.exists and letsencrypt_fullchain_stat.stat.exists) }}'
 
 
 - name: Configure nginx non-SSL config file
