@@ -2,7 +2,7 @@
 - name: Deploy to testing Docker container
   hosts: test
   vars:
-    server_names: 'localhost,www.localhost'
+    server_names: 'test-basic'
     project_name: 'test-basic'
     project_version: 0.1.0
     use_ssl: false

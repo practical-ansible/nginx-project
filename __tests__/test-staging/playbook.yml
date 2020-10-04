@@ -2,7 +2,7 @@
 - name: Deploy to testing Docker container
   hosts: test
   vars:
-    server_names: 'localhost,www.localhost'
+    server_names: 'test-staging'
     project_name: 'test-staging'
     project_version: 0.1.0
     project_environment: 'staging'

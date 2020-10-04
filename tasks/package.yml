@@ -1,5 +1,7 @@
 ---
 - name: Read npm project meta
+  delegate_to: localhost
+  become: false
   include_vars:
     file: package.json
     name: npm
@@ -8,6 +10,18 @@
 - name: Consume package.json
   include_tasks: package-npm.yml
   when: npm.name is defined
+
+- name: Check for setup.py
+  delegate_to: localhost
+  become: false
+  stat:
+    path: setup.py
+  register: setup_py_stat
+  failed_when: false
+
+- name: Consume setup.py
+  include_tasks: package-python.yml
+  when: setup_py_stat.stat.exists
 
 - name: Use testing package version
   set_fact:

@@ -3,7 +3,7 @@
   assert:
     that:
       - '{{ item }} is defined'
-      - item
+      - '{{ item }}'
   with_items:
     - 'admin_email'
 

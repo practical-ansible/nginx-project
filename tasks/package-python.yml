@@ -1,0 +1,14 @@
+---
+- name: Consume project name from setup.py
+  delegate_to: localhost
+  become: false
+  set_fact:
+    project_name: '{{ lookup("pipe", "python setup.py --name") }}'
+  when: (project_name is not defined) or (project_name|length == 0)
+
+- name: Consume project version from setup.py
+  delegate_to: localhost
+  become: false
+  set_fact:
+    project_version: '{{ lookup("pipe", "python setup.py --version") }}'
+  when: (project_version is not defined) or (project_version|length == 0)

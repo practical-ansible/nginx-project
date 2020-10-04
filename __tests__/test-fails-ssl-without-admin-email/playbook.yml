@@ -2,7 +2,7 @@
 - name: Deploy to testing Docker container
   hosts: test
   vars:
-    server_names: 'localhost,www.localhost'
+    server_names: 'fails-without-admin'
     ssl_sign_by: 'self'
     project_name: 'test-openssl'
     project_version: 0.1.0

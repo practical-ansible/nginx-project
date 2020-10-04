@@ -6,7 +6,7 @@
   assert:
     that:
       - '{{ item }} is defined'
-      - item
+      - '{{ item }}'
   with_items:
     - 'project_environment'
     - 'project_name'

@@ -3,7 +3,7 @@
   hosts: test
   vars:
     admin_email: 'admin@example.com'
-    server_names: 'localhost,www.localhost'
+    server_names: 'npm-test,www.npm-test'
     ssl_sign_by: 'self'
     use_ssl: true
     env:
