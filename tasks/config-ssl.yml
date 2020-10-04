@@ -2,10 +2,7 @@
 - name: Check required variables
   assert:
     that:
-      - '{{ item }} is defined'
-      - '{{ item }}'
-  with_items:
-    - 'admin_email'
+      - admin_email|length > 0
 
 - name: Enable nginx app
   file:

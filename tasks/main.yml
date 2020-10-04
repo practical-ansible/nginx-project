@@ -2,15 +2,16 @@
 
 - include_tasks: package.yml
 
+- name: xxx
+  debug:
+    var: project_environment
+
 - name: Check required variables
   assert:
     that:
-      - '{{ item }} is defined'
-      - '{{ item }}'
-  with_items:
-    - 'project_environment'
-    - 'project_name'
-    - 'server_names'
+      - project_environment|length > 0
+      - project_name|length > 0
+      - server_names|length > 0
 
 - name: Make project id safe
   set_fact:
