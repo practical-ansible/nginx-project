@@ -41,11 +41,6 @@
     path: '{{ file_letsencrypt_key }}'
     follow: true
 
-- name: Configure config path
-  set_fact:
-    config_le: '{{ not (letsencrypt_cert_stat.stat.exists and letsencrypt_key_stat.stat.exists and letsencrypt_fullchain_stat.stat.exists) }}'
-
-
 - name: Configure nginx non-SSL config file
   template:
     src: nginx.conf
@@ -55,7 +50,7 @@
     owner: '{{ user }}'
   notify:
     - reload nginx
-  when: config_le
+  when: not (letsencrypt_cert_stat.stat.exists and letsencrypt_key_stat.stat.exists and letsencrypt_fullchain_stat.stat.exists)
 
 - name: Generate letsencrypt signed certificate
   command: >-
@@ -65,7 +60,7 @@
     --agree-tos
     --domains {{ dns_all | join(",") }}
     --email {{ admin_email }}
-  when: config_le
+  when: not (letsencrypt_cert_stat.stat.exists and letsencrypt_key_stat.stat.exists and letsencrypt_fullchain_stat.stat.exists)
 
 - name: Link certificate
   file:
