@@ -2,10 +2,6 @@
 
 - include_tasks: package.yml
 
-- name: xxx
-  debug:
-    var: project_environment
-
 - name: Check required variables
   assert:
     that:
