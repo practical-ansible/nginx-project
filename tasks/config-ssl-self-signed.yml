@@ -56,6 +56,15 @@
     mode: 0660
     owner: '{{ user }}'
 
+- name: Link fullchain
+  file:
+    src: '{{ file_self_signed_cert }}'
+    dest: '{{ file_ssl_fullchain }}'
+    state: link
+    group: '{{ group }}'
+    mode: 0660
+    owner: '{{ user }}'
+
 - name: Link key
   file:
     src: '{{ file_self_signed_key }}'
